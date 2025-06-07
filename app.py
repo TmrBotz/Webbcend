@@ -5,7 +5,7 @@ from pyrogram import idle, Client
 from web import serve
 from utils import cache_manager
 from state import work_loads, multi_clients
-from config import API_ID, API_HASH, BOT_TOKEN
+from config import CLIENTS_CONFIG  # Changed import to new config structure
 from importlib import import_module
 import signal
 from utils.telegram_logger import send_info, send_error
@@ -13,8 +13,8 @@ from utils.db_utils.mongo_client import close_connections
 
 
 async def shutdowndb():
-    
     close_connections()
+
 
 basicConfig(
     format="[%(asctime)s] [%(levelname)s] - %(message)s",
@@ -27,9 +27,6 @@ loop = get_event_loop()
 LOGGER = getLogger(__name__)
 LOGGER.setLevel(INFO)
 
-# Credits:
-# This code is adapted from Surf-TG by weebzone (GitHub Username)
-# Source: https://github.com/weebzone/Surf-TG 
 
 class TokenParser:
 
@@ -40,36 +37,39 @@ class TokenParser:
 
         if not hasattr(import_module('config'), 'MULTI_TOKENS'):
             return {}
-            
-
+        
         tokens = {client_id: token for client_id, token in MULTI_TOKENS.items()}
         return tokens
 
 
 plugins = {"root": "plugins"}
 
+# Create the main bot client using the config for client_id 0
+bot_conf = CLIENTS_CONFIG.get(0)
+if not bot_conf:
+    raise RuntimeError("CLIENTS_CONFIG must contain a configuration for client_id 0")
+
 bot = Client(
     name="bot",
-    api_id=API_ID,
-    api_hash=API_HASH,
-    bot_token=BOT_TOKEN,
+    api_id=bot_conf["API_ID"],
+    api_hash=bot_conf["API_HASH"],
+    bot_token=bot_conf["BOT_TOKEN"],
     plugins=plugins,
     sleep_threshold=100,
     workers=80,
     max_concurrent_transmissions=1000,
 )
 
-# Credits:
-# This code is adapted from Surf-TG by weebzone (GitHub Username)
-# Source: https://github.com/weebzone/Surf-TG
-async def start_client(client_id, token):
+
+async def start_client(client_id, client_conf):
+    """Start a client given client_id and its config dict including API_ID, API_HASH, BOT_TOKEN"""
     try:
         LOGGER.info(f"Starting - Bot Client {client_id}")
         client = await Client(
             name=str(client_id),
-            api_id=API_ID,
-            api_hash=API_HASH,
-            bot_token=token,
+            api_id=client_conf["API_ID"],
+            api_hash=client_conf["API_HASH"],
+            bot_token=client_conf["BOT_TOKEN"],
             sleep_threshold=100,
             no_updates=True,
             in_memory=True,
@@ -80,9 +80,7 @@ async def start_client(client_id, token):
         LOGGER.error(f"Failed to start Client - {client_id} Error: {e}", exc_info=True)
         return None
 
-# Credits:
-# This code is adapted from Surf-TG by weebzone (GitHub Username)
-# Source: https://github.com/weebzone/Surf-TG
+
 async def initialize_clients():
     try:
         multi_clients[0] = bot
@@ -93,13 +91,15 @@ async def initialize_clients():
         multi_clients[0] = bot
         work_loads[0] = 0
 
-    all_tokens = TokenParser.parse_from_config()
-    if not all_tokens:
+    # Prepare additional clients excluding client_id 0
+    additional_clients_conf = {cid: conf for cid, conf in CLIENTS_CONFIG.items() if cid != 0}
+    if not additional_clients_conf:
         LOGGER.info("No additional Bot Clients found, Using default client")
         return
 
-    n = [create_task(start_client(i, token)) for i, token in all_tokens.items()]
+    n = [create_task(start_client(i, conf)) for i, conf in additional_clients_conf.items()]
     clients = await gather(*n)
+    # Filter out None results (failed starts)
     clients = {client_id: client for client_id, client in clients if client}
     multi_clients.update(clients)
 
@@ -108,17 +108,15 @@ async def initialize_clients():
     else:
         LOGGER.info("No additional clients were initialized, using default client")
 
-# Credits:
-# This code is adapted from Surf-TG by weebzone (GitHub Username)
-# Source: https://github.com/weebzone/Surf-TG
+
 async def init():
     await bot.start()
     LOGGER.info(f"Bot Started Successfully!")
 
-
     await initialize_clients()
+
     LOGGER.info("Starting cache manager...")
-    
+
     cache_task = create_task(cache_manager.start_cache_updater())
 
     cache_task.add_done_callback(
@@ -128,13 +126,14 @@ async def init():
             else None
         )
     )
-    
+
     LOGGER.info("Initializing Web Server...")
 
     loop.create_task(serve())
     LOGGER.info("Backend Started Successfully!")
     await send_info(bot, "🚀 Bot Started Successfully!")
     await idle()
+
 
 async def handle_cache_crash(task):
     exception = task.exception()
@@ -149,7 +148,7 @@ async def stop_clients():
     await shutdowndb()
     await bot.stop()
     for client_id, client in multi_clients.items():
-        if client_id != 0:  
+        if client_id != 0:
             try:
                 await client.stop()
                 LOGGER.info(f"Client {client_id} stopped successfully")
@@ -157,20 +156,23 @@ async def stop_clients():
                 LOGGER.error(f"Error stopping client {client_id}: {str(e)}")
                 await send_error(bot, f"Error stopping client {client_id}", e)
 
+
 def signal_handler(sig):
     LOGGER.info(f"Signal {sig} received, initiating shutdown...")
+
     async def shutdown():
         await send_info(bot, f"⚠️ Signal {sig} received, initiating shutdown...")
         await stop_clients()
         loop.stop()
-    
+
     loop.create_task(shutdown())
+
 
 if __name__ == "__main__":
     try:
         signal.signal(signal.SIGINT, signal_handler)
         signal.signal(signal.SIGTERM, signal_handler)
-        
+
         loop.run_until_complete(init())
     except KeyboardInterrupt:
         LOGGER.info("keyboard interrupt received, stopping...")
