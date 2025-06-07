@@ -1,9 +1,15 @@
 # Main configuration file
 
+
 # Mandatory Variables
-API_ID = 1111111 # Replace with your actual Telegram API ID
-API_HASH = "your_api_hash_here"  # Replace with your actual Telegram API Hash
-BOT_TOKEN = "your_bot_token_here"  # Replace with your actual Bot Token
+CLIENTS_CONFIG = {
+    0: {"API_ID": 1111111, "API_HASH": "your_api_hash_here", "BOT_TOKEN": "your_bot_token_here"}, #Replace with your First actual Telegram API ID, API HASH and the Bot token which you have used before for Deleting and Delivering Files.
+    1: {"API_ID": 1111111, "API_HASH": "your_api_hash_here", "BOT_TOKEN": "your_bot_token_here"}, #Replace with your Second actual Telegram API ID, API HASH and the same Bot token which you have used with first config.
+   #2: {"API_ID": 1111111, "API_HASH": "your_api_hash_here", "BOT_TOKEN": "your_bot_token_here"}, #Remove # to add more 3, 4, 5 ...
+}
+# API_ID = 1111111 # Replace with your actual Telegram API ID
+# API_HASH = "your_api_hash_here"  # Replace with your actual Telegram API Hash
+# BOT_TOKEN = "your_bot_token_here"  # Replace with your actual Bot Token
 OWNER_ID = "11111111"  # Replace with your actual Owner ID
 # Database
 DATABASE_URL = "your_database_url_here"  # Replace with your actual database URL
