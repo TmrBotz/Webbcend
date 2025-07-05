@@ -1,23 +1,23 @@
 # Main configuration file
 
 # Mandatory Variables
-API_ID = 1111111 # Replace with your actual Telegram API ID
-API_HASH = "your_api_hash_here"  # Replace with your actual Telegram API Hash
-BOT_TOKEN = "your_bot_token_here"  # Replace with your actual Bot Token
-OWNER_ID = "11111111"  # Replace with your actual Owner ID
+API_ID = 23171051 # Replace with your actual Telegram API ID
+API_HASH = "10331d5d712364f57ffdd23417f4513c"  # Replace with your actual Telegram API Hash
+BOT_TOKEN = "7504435560:AAGUjLmZ1II2LN_3cIYAkRweT-Cpy4RVJv0"  # Replace with your actual Bot Token
+OWNER_ID = "6987799874"  # Replace with your actual Owner ID
 # Database
-DATABASE_URL = "your_database_url_here"  # Replace with your actual database URL
+DATABASE_URL = "mongodb+srv://drozmarizabel991hull:Xh89XLrFTYOPgupl@cluster0.x8qoe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"  # Replace with your actual database URL
 
-AUTH_CHAT = "-100123456789 -1001234567890" # Replace with your actual auth chat ID. You can use multiple IDs separated by ( space ).
-LOGS_CHAT = -1001234567891 # Replace with your actual logs chat ID
-POST_CHAT = -1001234567891 # Replace with your actual post chat ID
+AUTH_CHAT = "-1002065082779 -1002205504138" # Replace with your actual auth chat ID. You can use multiple IDs separated by ( space ).
+LOGS_CHAT = -1002205504138 # Replace with your actual logs chat ID
+POST_CHAT = -1002205504138 # Replace with your actual post chat ID
 
 ADMIN_USERNAME = "admin" # Replace with your admin username
-ADMIN_PASSWORD = "adminadmin" # Replace with your admin password
+ADMIN_PASSWORD = "vishal" # Replace with your admin password
 
 
-SITE_SECRET = "your_secret_key" # Replace with your site secret key
-TMDB_API_KEY = "" # Replace with your TMDB API key
+SITE_SECRET = "Tmrbotz*12345" # Replace with your site secret key
+TMDB_API_KEY = "4b6e108d2d340e1c4da27a739feaf820" # Replace with your TMDB API key
 
 # Optional Variables
 
