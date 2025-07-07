@@ -8,7 +8,7 @@ OWNER_ID = "6987799874"  # Replace with your actual Owner ID
 # Database
 DATABASE_URL = "mongodb+srv://tmrbotz:gRkWfPA0ToDRNe1d@cluster0.rxoovko.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"  # Replace with your actual database URL
 
-AUTH_CHAT = "-1002065082779" # Replace with your actual auth chat ID. You can use multiple IDs separated by ( space ).
+AUTH_CHAT = "-1002234850464" # Replace with your actual auth chat ID. You can use multiple IDs separated by ( space ).
 LOGS_CHAT = -1002205504138 # Replace with your actual logs chat ID
 POST_CHAT = -1002205504138 # Replace with your actual post chat ID
 
