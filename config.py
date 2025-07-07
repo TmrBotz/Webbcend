@@ -3,12 +3,12 @@
 # Mandatory Variables
 API_ID = 23171051 # Replace with your actual Telegram API ID
 API_HASH = "10331d5d712364f57ffdd23417f4513c"  # Replace with your actual Telegram API Hash
-BOT_TOKEN = "7504435560:AAGUjLmZ1II2LN_3cIYAkRweT-Cpy4RVJv0"  # Replace with your actual Bot Token
+BOT_TOKEN = "7569956429:AAEnSX4FNm4_8CsQ_IPdIp8T93_nQ4JqesI"  # Replace with your actual Bot Token
 OWNER_ID = "6987799874"  # Replace with your actual Owner ID
 # Database
-DATABASE_URL = "mongodb+srv://drozmarizabel991hull:Xh89XLrFTYOPgupl@cluster0.x8qoe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"  # Replace with your actual database URL
+DATABASE_URL = "mongodb+srv://tmrbotz:gRkWfPA0ToDRNe1d@cluster0.rxoovko.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"  # Replace with your actual database URL
 
-AUTH_CHAT = "-1002065082779 -1002205504138" # Replace with your actual auth chat ID. You can use multiple IDs separated by ( space ).
+AUTH_CHAT = "-1002065082779" # Replace with your actual auth chat ID. You can use multiple IDs separated by ( space ).
 LOGS_CHAT = -1002205504138 # Replace with your actual logs chat ID
 POST_CHAT = -1002205504138 # Replace with your actual post chat ID
 
